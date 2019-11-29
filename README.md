@@ -1,1 +1,1 @@
-# infinitemondrian
+# Infinite Mondrian
