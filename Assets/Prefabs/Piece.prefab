@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3d1c4ac7494fb5c488194a9b5e64412e, type: 2}
+  - {fileID: 2100000, guid: f517ae01339caf74191c201fd04494a6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,21 +106,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Renderer: {fileID: 3491336585326679224}
-  Valid: 0
-  State: 0
-  List:
-  - {fileID: 2100000, guid: 3d1c4ac7494fb5c488194a9b5e64412e, type: 2}
-  - {fileID: 2100000, guid: f517ae01339caf74191c201fd04494a6, type: 2}
-  - {fileID: 2100000, guid: 99682e9d7c1cd7f469413114dacd167e, type: 2}
-  - {fileID: 2100000, guid: c4609fc1187285b4d8f2c40fec66062a, type: 2}
-  - {fileID: 2100000, guid: f1dc16b026232794792c492f3408d53a, type: 2}
-  - {fileID: 2100000, guid: b68cbbba423855b409a4c537d4ab5747, type: 2}
-  - {fileID: 2100000, guid: 099203f06af244443906371b88a60b00, type: 2}
-  - {fileID: 2100000, guid: 132a0527857faae45b5da610e4cdfa88, type: 2}
-  - {fileID: 2100000, guid: fa247bacb3018c045a9840cb79fc698c, type: 2}
+  ColorList:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 1, g: 1, b: 1, a: 0}
+  - {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 0}
+  - {r: 0.8627451, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0.60784316, b: 0.13725491, a: 0}
+  - {r: 0, g: 0, b: 0.84313726, a: 0}
+  - {r: 0.8039216, g: 0.8039216, b: 0, a: 0}
+  - {r: 0.88235295, g: 0.15686275, b: 0.25490198, a: 0}
+  - {r: 0.8627451, g: 0.23529412, b: 0.11764706, a: 0}
   A: 0
   B: 0
   X: 0
   Y: 0
   W: 0
   H: 0
+  Grid: 20
+  Size: 1
+  Price: 0
+  Index: 0
+  Valid: 0
+  State: 0
