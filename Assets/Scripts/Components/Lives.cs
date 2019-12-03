@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Point : MonoBehaviour
+public class Lives : MonoBehaviour
 {
     [Header("Component")]
     public List<UnityEngine.UI.RawImage> List;
@@ -15,7 +15,7 @@ public class Point : MonoBehaviour
     
     void Start()
     {
-        Value = Instance.Point;
+        Value = Instance.Lives;
 
         foreach (var Image in List)
         {
@@ -25,9 +25,9 @@ public class Point : MonoBehaviour
     
     void Update()
     {
-        if (Value != Instance.Point)
+        if (Value != Instance.Lives)
         {
-            Value = Instance.Point;
+            Value = Instance.Lives;
 
             foreach (var Image in List)
             {

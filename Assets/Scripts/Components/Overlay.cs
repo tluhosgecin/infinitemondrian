@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Overlay : MonoBehaviour
 {
@@ -9,9 +10,12 @@ public class Overlay : MonoBehaviour
     public GameObject Cessation;
 
     [Header("Countdown")]
-    public UnityEngine.UI.Text Count;
-    public float               Timer  = 5;
-    public bool                Active = true;
+    public List<Texture2D>         TextureList;
+    public UnityEngine.UI.RawImage Image;
+    public int                     Index  = 0;
+    public float                   Count  = 1;
+    public float                   Timer  = 0;
+    public bool                    Active = true;
 
     [Header("Cessation")]
     public UnityEngine.UI.Text Feedback;
@@ -25,18 +29,25 @@ public class Overlay : MonoBehaviour
     
     void OnEnable()
     {
-        Button.OnAction     += Conclusion;
-        Tunnel.OnConclusion += Transition;
+        Button.OnAction += Conclusion;
+        Tunnel.OnFinish += Transition;
     }
 
     void OnDisable()
     {
-        Button.OnAction     -= Conclusion;
-        Tunnel.OnConclusion -= Transition;
+        Button.OnAction -= Conclusion;
+        Tunnel.OnFinish -= Transition;
     }
     
     void Start()
     {
+        if (TextureList.Count > Index)
+        {
+            Image.texture = TextureList[Index];
+            Image.SetNativeSize();
+            Index += 1;
+        }
+
         Countdown.SetActive(true);
         Interface.SetActive(false);
         Cessation.SetActive(false);
@@ -46,13 +57,20 @@ public class Overlay : MonoBehaviour
     {
         if (Active == true)
         {
-            if (Timer > 0)
+            if (TextureList.Count >= Index && Timer < Count)
             {
-                Timer -= Time.deltaTime;
+                Timer += Time.deltaTime;
 
-                if (Timer > 0)
+                if (Timer >= Count)
                 {
-                    Count.text = Mathf.Ceil(Timer).ToString();
+                    if (TextureList.Count > Index)
+                    {
+                        Image.texture = TextureList[Index];
+                        Image.SetNativeSize();
+                    }
+
+                    Timer = 0f;
+                    Index += 1;
                 }
             }
             else
@@ -79,7 +97,7 @@ public class Overlay : MonoBehaviour
 
     void Transition(bool result)
     {
-        Point.text = "Lives: " + Instance.Point.ToString();
+        Point.text = "Lives: " + Instance.Lives.ToString();
         Score.text = "Score: " + Instance.Score.ToString();
 
         Feedback.text  = (result == true) ? PositiveMessage : NegativeMessage;

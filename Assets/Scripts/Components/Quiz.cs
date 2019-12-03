@@ -21,8 +21,8 @@ public class Quiz : MonoBehaviour
         PieceList.Add(Piece);
 
         Piece.SetCube(data.X, data.Y, data.W, data.H);
-        Piece.SetType(data.A, data.B);
-        Piece.SetData(data.P, data.I);
-        Piece.SetBase(data.V, data.S);
+        Piece.SetBase(data.I, data.E, 0);
+        Piece.SetRoot(data.V, data.S);
+        Piece.SetData(data.P, data.G, data.L, data.A);
     }
 }

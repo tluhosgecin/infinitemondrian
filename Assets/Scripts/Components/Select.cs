@@ -31,7 +31,7 @@ public class Select : MonoBehaviour
             Return.Active = false;
 
             Instance.Level = "EA00";
-            Instance.Point = 5;
+            Instance.Lives = 5;
             Instance.Score = 0;
             Instance.Info  = false;
             Instance.Ready = false;
@@ -51,7 +51,7 @@ public class Select : MonoBehaviour
             Return.Active = false;
 
             Instance.Level = "EP00";
-            Instance.Point = 5;
+            Instance.Lives = 5;
             Instance.Score = 0;
             Instance.Info  = false;
             Instance.Ready = false;
@@ -71,7 +71,7 @@ public class Select : MonoBehaviour
             Return.Active = false;
 
             Instance.Level = "CA00";
-            Instance.Point = 5;
+            Instance.Lives = 5;
             Instance.Score = 0;
             Instance.Info  = true;
             Instance.Ready = false;
@@ -91,7 +91,7 @@ public class Select : MonoBehaviour
             Return.Active = false;
 
             Instance.Level = "CP00";
-            Instance.Point = 5;
+            Instance.Lives = 5;
             Instance.Score = 0;
             Instance.Info  = true;
             Instance.Ready = false;

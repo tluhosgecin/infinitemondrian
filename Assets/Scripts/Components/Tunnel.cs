@@ -3,14 +3,18 @@ using UnityEngine;
 
 public class Tunnel : MonoBehaviour
 {
-    public delegate void  Conclusion(bool result);
-    public static   event Conclusion OnConclusion;
+    public delegate void  Finish(bool result);
+    public static   event Finish OnFinish;
 
     private Color   Base = new Color(0f, 0f, 0f);
     private Vector3 Root = new Vector3(0f, 0f, 0f);
-    
+
     [Header("Component")]
     public Puzzle Puzzle;
+
+    [Header("Puzzle")]
+    public Piece     Elected;
+    public List<int> Overlap;
 
     [Header("Movement")]
     public float Speed = 2f;
@@ -31,12 +35,14 @@ public class Tunnel : MonoBehaviour
     
     void OnEnable()
     {
-        Piece.OnResponse += Response;
+        Piece.OnEnter += Enter;
+        Piece.OnLeave += Leave;
     }
 
     void OnDisable()
     {
-        Piece.OnResponse -= Response;
+        Piece.OnEnter -= Enter;
+        Piece.OnLeave -= Leave;
     }
     
     void Update()
@@ -56,6 +62,133 @@ public class Tunnel : MonoBehaviour
                 Puzzle.Current                         = Puzzle.QuizList[Puzzle.Index++];
                 Puzzle.Current.transform.parent        = PipeList[PipeList.Count - 1].transform;
                 Puzzle.Current.transform.localPosition = new Vector3(0f, 0f, 0f);
+            }
+
+            /*
+            *   Evaluate Piece Selection
+            */
+            if (Elected != null)
+            {
+                Feedback = true;
+                Accuracy = Elected.State;
+
+                /*
+                *   Check If Multiple Entries
+                */
+                foreach (var Group in Overlap)
+                {
+                    if (Group != Elected.Group)
+                    {
+                        Accuracy = 0;
+
+                        break;
+                    }
+                }
+                
+                /*
+                *   Given Answer Is Correct
+                */
+                if (Accuracy == 1)
+                {
+                    Instance.Score += 1;
+                    
+                    /*
+                    *   Remove The Solved Piece From Quiz
+                    */
+                    foreach (var Piece in Puzzle.Current.PieceList)
+                    {
+                        if (Piece.Group == Elected.Group)
+                        {
+                            Piece.SetRoot(0, 0);
+                            Piece.SetNext();
+                        }
+                    }
+                    
+                    /*
+                    *   Find And Assign Next Correct Piece
+                    */
+                    Piece Object = null;
+                    
+                    foreach (var Piece in Puzzle.Current.PieceList)
+                    {
+                        if (Piece.Valid == 1 && Piece.State == 0)
+                        {
+                            if (Object == null)
+                            {
+                                Object = Piece;
+                            }
+                            else
+                            {
+                                if (Piece.Price > Object.Price)
+                                {
+                                    Object = Piece;
+                                }
+                            }
+                        }
+                    }
+
+                    if (Object == null)
+                    {
+                        /*
+                        *   Remove The Solved Quiz From Tunnel
+                        */
+                        if (Puzzle.Current != null)
+                        {
+                            Puzzle.Current.transform.parent        = Puzzle.transform;
+                            Puzzle.Current.transform.localPosition = new Vector3(0f, 0f, 0f);
+                            Puzzle.Current                         = null;
+                        }
+
+                        /*
+                        *   End Of The Level (Positive)
+                        */
+                        if (Puzzle.Index == Puzzle.QuizList.Count)
+                        {
+                            Instance.Ready = false;
+
+                            if (OnFinish != null)
+                            {
+                                OnFinish(true);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        /*
+                        *   Assign The Next Linked Pieces To Be Solved
+                        */
+                        foreach (var Piece in Puzzle.Current.PieceList)
+                        {
+                            if (Piece.Group == Object.Group)
+                            {
+                                Piece.SetRoot(1, 1);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    /*
+                    *   Deduct One Point From The Player
+                    */
+                    Instance.Lives -= 1;
+                    
+                    /*
+                    *   End Of The Level (Negative)
+                    */
+                    if (Instance.Lives == 0)
+                    {
+                        Instance.Ready = false;
+                        
+                        if (OnFinish != null)
+                        {
+                            OnFinish(false);
+                        }
+                    }
+                }
+                
+                Elected = null;
+                Overlap.Clear();
             }
             
             /*
@@ -165,109 +298,17 @@ public class Tunnel : MonoBehaviour
         transform.position += (Root * Time.deltaTime * Timer * (Speed / Surge));
     }
     
-    void Response(Piece target)
+    void Enter(Piece data)
     {
-        Feedback = true;
-        Accuracy = target.State;
-
-        if (Accuracy == 1)
+        if (Overlap != null)
         {
-            Instance.Score += 1;
-            
-            /*
-            *   Remove The Solved Piece From Quiz
-            */
-            foreach (var Piece in Puzzle.Current.PieceList)
-            {
-                if (Piece.Index == target.Index)
-                {
-                    Piece.SetBase(0, 0);
-                    Piece.SetNext();
-                }
-            }
-            
-            /*
-            *   Find And Assign Next Correct Piece
-            */
-            Piece Object = null;
-            
-            foreach (var Piece in Puzzle.Current.PieceList)
-            {
-                if (Piece.Valid == 1 && Piece.State == 0)
-                {
-                    if (Object == null)
-                    {
-                        Object = Piece;
-                    }
-                    else
-                    {
-                        if (Piece.Price > Object.Price)
-                        {
-                            Object = Piece;
-                        }
-                    }
-                }
-            }
-
-            if (Object == null)
-            {
-                /*
-                *   Remove The Solved Quiz From Tunnel
-                */
-                if (Puzzle.Current != null)
-                {
-                    Puzzle.Current.transform.parent        = Puzzle.transform;
-                    Puzzle.Current.transform.localPosition = new Vector3(0f, 0f, 0f);
-                    Puzzle.Current                         = null;
-                }
-
-                /*
-                *   End Of The Level (Positive)
-                */
-                if (Puzzle.Index == Puzzle.QuizList.Count)
-                {
-                    Instance.Ready = false;
-
-                    if (OnConclusion != null)
-                    {
-                        OnConclusion(true);
-                    }
-                }
-            }
-            else
-            {
-                /*
-                *   Assign The Next Linked Pieces To Be Solved
-                */
-                foreach (var Piece in Puzzle.Current.PieceList)
-                {
-                    if (Piece.Index == Object.Index)
-                    {
-                        Piece.SetBase(1, 1);
-                    }
-                }
-            }
+            Overlap.Add(data.Group);
         }
-        else
-        {
-            /*
-            *   Deduct One Point From The Player
-            */
-            Instance.Point -= 1;
-            
-            /*
-            *   End Of The Level (Negative)
-            */
-            if (Instance.Point == 0)
-            {
-                Instance.Ready = false;
-                
-                if (OnConclusion != null)
-                {
-                    OnConclusion(false);
-                }
-            }
-        }
+    }
+
+    void Leave(Piece data)
+    {
+        Elected = data;
     }
     
     Color Ease(float time, Color begin, Color change, float duration)

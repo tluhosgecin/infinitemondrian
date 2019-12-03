@@ -5,43 +5,43 @@ public class PieceData
 {
     public int X = 0;
     public int Y = 0;
-    public int W = 1;
-    public int H = 1;
-    public int P = 0;
+    public int W = 0;
+    public int H = 0;
     public int I = 0;
-    public int A = 0;
-    public int B = 0;
+    public int E = 0;
     public int V = 0;
     public int S = 0;
+    public int P = 0;
+    public int G = 0;
+    public int L = 0;
+    public int A = 0;
 
-    public PieceData(int x, int y, int w, int h, int p, int i, int a, int b, int v, int s)
+    public PieceData(int x, int y, int w, int h, int i, int e, int v, int s, int p, int g, int l, int a)
     {
         X = x;
         Y = y;
         W = w;
         H = h;
-        P = p;
         I = i;
-        A = a;
-        B = b;
+        E = e;
         V = v;
         S = s;
+        P = p;
+        G = g;
+        L = l;
+        A = a;
     }
 }
 
 public class Piece : MonoBehaviour
 {
-    public delegate void  Response(Piece target);
-    public static   event Response OnResponse;
-
+    public delegate void  Response(Piece data);
+    public static   event Response OnEnter;
+    public static   event Response OnLeave;
+    
     [Header("Component")]
     public Renderer Renderer;
 
-    [Header("Color")]
-    public List<Color> ColorList;
-    public int         A = 0;
-    public int         B = 0;
-    
     [Header("Transform")]
     public int   X    = 0;
     public int   Y    = 0;
@@ -50,11 +50,33 @@ public class Piece : MonoBehaviour
     public int   Grid = 20;
     public float Size = 1f;
 
-    [Header("Data")]
-    public int Price = 0;
-    public int Index = 0;
+    [Header("Color")]
+    public List<Color> ColorList;
+    public int         Initial = 0;
+    public int         Elected = 0;
+
+    [Header("Base")]
     public int Valid = 0;
     public int State = 0;
+
+    [Header("Data")]
+    public int Price    = 0;
+    public int Group    = 0;
+    public int Latitude = 0;
+    public int Altitude = 0;
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.tag != "Player")
+        {
+            return;
+        }
+
+        if (OnEnter != null && Valid == 1)
+        {
+            OnEnter(this);
+        }
+    }
 
     void OnTriggerExit(Collider collider)
     {
@@ -63,9 +85,9 @@ public class Piece : MonoBehaviour
             return;
         }
 
-        if (OnResponse != null && Valid == 1)
+        if (OnLeave != null && Valid == 1)
         {
-            OnResponse(this);
+            OnLeave(this);
         }
     }
     
@@ -75,7 +97,7 @@ public class Piece : MonoBehaviour
         Y = y;
         W = w;
         H = h;
-        
+
         var RX = +1;
         var RY = -1;
 
@@ -89,36 +111,38 @@ public class Piece : MonoBehaviour
         transform.localScale    = new Vector3(NW, NH, 0.1f);
     }
 
-    public void SetType(int a, int b)
+    public void SetBase(int initial, int elected, int z)
     {
-        A = a;
-        B = b;
+        Initial = initial;
+        Elected = elected;
 
-        if (ColorList == null || ColorList.Count <= A)
+        if (ColorList == null || ColorList.Count <= Initial)
         {
             return;
         }
 
-        Renderer.material.SetColor("_BaseColor", ColorList[A]);
+        Renderer.material.SetColor("_BaseColor", ColorList[Initial]);
     }
 
     public void SetNext()
     {
-        if (ColorList == null || ColorList.Count <= B)
+        if (ColorList == null || ColorList.Count <= Elected)
         {
             return;
         }
 
-        Renderer.material.SetColor("_BaseColor", ColorList[B]);
+        Renderer.material.SetColor("_BaseColor", ColorList[Elected]);
     }
 
-    public void SetData(int price, int index)
+    public void SetData(int price, int group, int latitude, int altitude)
     {
-        Price = price;
-        Index = index;
+        Price    = price;
+        Group    = group;
+        Latitude = latitude;
+        Altitude = altitude;
     }
 
-    public void SetBase(int valid, int state)
+    public void SetRoot(int valid, int state)
     {
         Valid = valid;
         State = state;

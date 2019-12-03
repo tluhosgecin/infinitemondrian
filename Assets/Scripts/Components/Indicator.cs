@@ -5,10 +5,10 @@ using UnityEngine;
 public class Indicator : MonoBehaviour
 {
     [Header("Component")]
-    public UnityEngine.UI.RawImage ImageH;
-    public UnityEngine.UI.RawImage ImageW;
-    public UnityEngine.UI.Text     TextH;
-    public UnityEngine.UI.Text     TextW;
+    public UnityEngine.UI.RawImage ILatitude;
+    public UnityEngine.UI.RawImage IAltitude;
+    public UnityEngine.UI.Text     TLatitude;
+    public UnityEngine.UI.Text     TAltitude;
 
     [Header("Data")]
     public bool Active = true;
@@ -25,22 +25,44 @@ public class Indicator : MonoBehaviour
 
     void Start()
     {
-        TextH.text = "0";
-        TextW.text = "0";
+        TLatitude.text = "0";
+        TAltitude.text = "0";
 
-        ImageH.gameObject.SetActive(false);
-        ImageW.gameObject.SetActive(false);
+        ILatitude.gameObject.SetActive(false);
+        IAltitude.gameObject.SetActive(false);
     }
     
-    void Transition(bool valid, int w, int h)
+    void Transition(bool valid, int latitude, int altitude)
     {
+        if (valid == false)
+        {
+            ILatitude.gameObject.SetActive(false);
+            IAltitude.gameObject.SetActive(false);
+
+            return;
+        }
+
         if (Active == true && Instance.Info == true)
         {
-            TextH.text = h.ToString();
-            TextW.text = w.ToString();
+            if (latitude > 0)
+            {
+                TLatitude.text = latitude.ToString();
+                ILatitude.gameObject.SetActive(true);
+            }
+            else
+            {
+                ILatitude.gameObject.SetActive(false);
+            }
 
-            ImageH.gameObject.SetActive(valid);
-            ImageW.gameObject.SetActive(valid);
+            if (altitude > 0)
+            {
+                TAltitude.text = altitude.ToString();
+                IAltitude.gameObject.SetActive(true);
+            }
+            else
+            {
+                IAltitude.gameObject.SetActive(false);
+            }
         }
     }
 }

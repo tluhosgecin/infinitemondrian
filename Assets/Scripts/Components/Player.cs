@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
                         
                         if (OnPoint != null)
                         {
-                            OnPoint(true, Piece.W, Piece.H);
+                            OnPoint(true, Piece.Latitude, Piece.Altitude);
                         }
                     }
                     else
