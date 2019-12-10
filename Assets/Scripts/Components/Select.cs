@@ -36,7 +36,7 @@ public class Select : MonoBehaviour
             Instance.Info  = false;
             Instance.Ready = false;
 
-            Fade.Index  = 4;
+            Fade.Index  = 5;
             Fade.Status = true;
 
             return;
@@ -56,7 +56,7 @@ public class Select : MonoBehaviour
             Instance.Info  = false;
             Instance.Ready = false;
             
-            Fade.Index  = 4;
+            Fade.Index  = 5;
             Fade.Status = true;
 
             return;
@@ -76,7 +76,7 @@ public class Select : MonoBehaviour
             Instance.Info  = true;
             Instance.Ready = false;
 
-            Fade.Index  = 4;
+            Fade.Index  = 5;
             Fade.Status = true;
 
             return;
@@ -96,7 +96,7 @@ public class Select : MonoBehaviour
             Instance.Info  = true;
             Instance.Ready = false;
 
-            Fade.Index  = 4;
+            Fade.Index  = 5;
             Fade.Status = true;
 
             return;
@@ -110,7 +110,7 @@ public class Select : MonoBehaviour
             Level4.Active = false;
             Return.Active = false;
 
-            Fade.Index  = 2;
+            Fade.Index  = 3;
             Fade.Status = true;
 
             return;

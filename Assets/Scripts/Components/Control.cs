@@ -26,7 +26,7 @@ public class Control : MonoBehaviour
             Credits.Active = false;
             Exit.Active    = false;
 
-            Fade.Index  = 3;
+            Fade.Index  = 4;
             Fade.Status = true;
 
             return;

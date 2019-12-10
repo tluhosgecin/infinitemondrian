@@ -1079,7 +1079,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 1352913223}
-  Index: 0
+  Index: 5
   Current: 0
   Duration: 0.5
   Black: {r: 0, g: 0, b: 0, a: 1}
