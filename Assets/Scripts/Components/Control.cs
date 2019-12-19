@@ -38,7 +38,7 @@ public class Control : MonoBehaviour
             Credits.Active = false;
             Exit.Active    = false;
 
-            Fade.Index  = 0;
+            Fade.Index  = 1;
             Fade.Status = true;
 
             return;
